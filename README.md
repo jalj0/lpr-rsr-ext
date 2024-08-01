@@ -65,7 +65,7 @@ df.to_csv('output.csv', lineterminator='\n')
 ### 1. Import Issue
 
 #### Issue:
-`from NetSr_v1 import MobileNetV2` might not work, instead use `lineterminator`.
+If you want to use MobileNetV2, please upgrade your tensorflow version and you can use as it mentioned in the documentation as `from NetSr_v1 import MobileNetV2` might not work.
 
 #### Solution:
 1. For Google Colab and latest version of tensorflow, Use: `!pip install keras_applications` will install keras-applications >= 1.0.8 For tensorflow version >= 2.5.0
