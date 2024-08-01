@@ -90,5 +90,5 @@ df.to_csv('output.csv', lineterminator='\n')
 }
 ```
 
-Additionally, consider showing your support by starring (:star:) this repository.
+Additionally, support this repository.
 
