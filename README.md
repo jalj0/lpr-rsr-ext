@@ -34,7 +34,7 @@ python testing.py -t ./dataset/split.txt -s ./save -b 2 --model /home1/jalaj_l/P
 
 ### 1. \_\_dataset\_\_.py
 * DataFrame to CSV Export Issue
- Issue:
+- Issue:
 You may encounter a error in `load_dataset()`.
 ```python
 Error in load_dataset: list index out of range
@@ -53,7 +53,7 @@ layout = fp.readlines()[0].split(':')[1].replace('\n', '').replace(' ', '')
 
 ### 2. testing.py
 * Structural Similarity Index (SSIM) Error
- Issue:
+- Issue:
 You may encounter a `ValueError` when using the `structural_similarity` function from `skimage.metrics` if the `win_size` exceeds the image dimensions.
  Solution:
 1. **Ensure Image Size**: Make sure your images are at least 7x7 pixels.
