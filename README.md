@@ -34,12 +34,12 @@ python testing.py -t ./dataset/split.txt -s ./save -b 2 --model /home1/jalaj_l/P
 
 ### 1. \_\_dataset\_\_.py
 - DataFrame to CSV Export Issue
-Issue:
+-- Issue:
 You may encounter a error in `load_dataset()`.
 ```python
 Error in load_dataset: list index out of range
 ```
-Solution:
+-- Solution:
 Diagnose the code line by line using some `print()` operation.
 Example:
 ```python
@@ -53,13 +53,13 @@ layout = fp.readlines()[0].split(':')[1].replace('\n', '').replace(' ', '')
 
 ### 2. testing.py
 - Structural Similarity Index (SSIM) Error
-Issue:
+-- Issue:
 You may encounter a `ValueError` when using the `structural_similarity` function from `skimage.metrics` if the `win_size` exceeds the image dimensions.
-Solution:
+-- Solution:
 1. **Ensure Image Size**: Make sure your images are at least 7x7 pixels.
 2. **Specify `win_size`**: Pass an odd `win_size` value that is less than or equal to the smaller dimension of your images.
 3. **Set `channel_axis`**: For multichannel images (e.g., RGB), set `channel_axis` to the axis number corresponding to the channels (typically `channel_axis=2` for RGB).
-Example:
+-- Example:
 ```python
 from skimage.metrics import structural_similarity as ssim
 
@@ -73,22 +73,22 @@ SSIM_param = {
 psnr_ssim[1].append(ssim(imgHR, imgSR, **SSIM_param, channel_axis = 2))    #
 ```
 - DataFrame to CSV Export Issue
-Issue:
+-- Issue:
 When exporting a DataFrame to CSV using pandas, you might encounter a TypeError if using the argument `line_terminator` instead of `lineterminator`.
-Solution:
+-- Solution:
 Replace line_terminator with lineterminator to specify the line terminator for the CSV output.
-Example:
+-- Example:
 ```python
 # Use lineterminator instead of line_terminator
 df.to_csv('output.csv', lineterminator='\n')
 ```
 - DataFrame average operation on all column
-Issue:
+-- Issue:
 ```python
 TypeError: Could not convert [...] to numeric:
 df.loc['Average'] = df.mean(axis=0)
 ```
-Solution:
+-- Solution:
 In your DataFrame, columns like 'Type', 'Layout', 'GT Plate', 'file', and predictions contain string values, which cannot be averaged. Use below code instead.
 ```python
 df.loc['Average'] = df.select_dtypes(include=[np.number]).mean(axis=0)
@@ -97,19 +97,19 @@ df.loc['Average'] = df.select_dtypes(include=[np.number]).mean(axis=0)
 ### 3. training.py
 
 - Import Issue
-Issue:
+-- Issue:
 If you want to use MobileNetV2, please upgrade your tensorflow version and you can use as it mentioned in the documentation as `from NetSr_v1 import MobileNetV2` might not work.
-Solution:
+-- Solution:
 1. For Google Colab and latest version of tensorflow, Use: `!pip install keras_applications` will install keras-applications >= 1.0.8 For tensorflow version >= 2.5.0
 2. use from `keras.applications.mobilenet_v2 import MobileNetV2`.
 
 ### 4. eval_csv.py
 - Levenshtein distance problem
-Issue:
+-- Issue:
 ```python
 In eval_csv.py line no 20, errors = Levenshtein.distance(a, b)
 ```
-Solution:
+-- Solution:
 This worked for me:
 ```python
 from training import SSIMLoss
@@ -120,11 +120,11 @@ from training import SSIMLoss
 		...
 ```
 - levenshtein() problem
-Issue:
+-- Issue:
 ```python
 TypeError: 'float' object is not subscriptable
 ```
-Solution:
+-- Solution:
 A float value is being passed to the levenshtein() function, which expects strings to compare character by character. This likely means that some values in gt (ground truth) or sr (super-resolved predictions) are not strings but floats, and the function tries to perform character-by-character comparisons on a float, which is not possible. After here and there you can convert a&b to str(a) & str(b). But you will find NaN which is one of possible prediction.
 ```python
 # Replace NaN values with empty strings
