@@ -7,7 +7,15 @@ Original Paper: [Super-Resolution of License Plate Images Using
 ## Custom Dataset Fine-tune
 1. `dataset` folder structure:
 
-dataset/ ├── HR/ # Contains high-resolution images ├── LR/ # Contains low-resolution images └── split.txt # Contains dataset split information
+├── dataset
+│   ├── HR	# will contain the HR imgs with respective labels
+│   │   ├── img891.jpg
+│   │   ├── img891.txt
+│   │   ├── ...
+│   ├── LR	# will contain the corresponding LR imgs only
+│   │   ├── img891.jpg
+│   │   ├── ...
+│   └── split.txt
 
 2. Make a text file 'split.txt' which will contain the path for HR and LR with type, all seperated by ';'.
 ```python
