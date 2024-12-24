@@ -5,22 +5,29 @@ Original Paper: [Super-Resolution of License Plate Images Using
 1. Leveraged [Deformable Convolution](https://arxiv.org/pdf/1703.06211) layers to enhance the model’s performance.
 2. Formulated a new loss function based on the SSIM metric, termed as `Dissimilarity Loss`.
 ## Custom Dataset Fine-tune
-### 1. Dataset Structure
-1. Make a text file 'split.txt' which will contain the path for HR and LR with type, all seperated by ';'.
+1. `dataset` folder structure:
+
+### Project tree
+ * [dataset]
+   * [HR]
+   * [LR]
+   * [split.txt]
+
+2. Make a text file 'split.txt' which will contain the path for HR and LR with type, all seperated by ';'.
 ```python
 dataset/HR/img891.jpg;dataset/LR/img891.jpg;training
 dataset/HR/img185.jpg;dataset/LR/img185.jpg;validation
 dataset/HR/img089.jpg;dataset/LR/img089.jpg;testing
 ```
-2. Run the following code to fine-tune
+3. Run the following code to fine-tune
 ```python
-# Set mode to '1' to resume training & select your best model
+# Set mode to '1' to resume training & select your best pretrained model
 python training.py -t ./dataset/split.txt -s ./save -b 2 -m 1 --model /home1/jalaj_l/Proposed/save/bestpretrainedmodel.pt
 ```
 ## Training from Start
 1. Run the following code to start training from scratch
 ```python
-# Set mode to '1' to resume training & select your best model
+# Set mode to '0' to start pre-training
 python training.py -t ./dataset/split.txt -s ./save -b 2 -m 0
 ```
 ## Testing the Model
@@ -35,10 +42,7 @@ python testing.py -t ./dataset/split.txt -s ./save -b 2 --model /home1/jalaj_l/P
 ### 1. \_\_dataset\_\_.py
 * DataFrame to CSV Export Issue
 
-Issue: You may encounter a error in `load_dataset()`.
-```python
-Error in load_dataset: list index out of range
-```
+Issue: You may encounter a error in `load_dataset()`: `Error in load_dataset: list index out of range`
 
 Solution: Diagnose the code line by line using some `print()` operation.
 
@@ -89,11 +93,7 @@ df.to_csv('output.csv', lineterminator='\n')
 ```
 * DataFrame average operation on all column
 
-Issue:
-```python
-TypeError: Could not convert [...] to numeric:
-df.loc['Average'] = df.mean(axis=0)
-```
+Issue: `TypeError: Could not convert [...] to numeric`
 
 Solution:
 In your DataFrame, columns like 'Type', 'Layout', 'GT Plate', 'file', and predictions contain string values, which cannot be averaged. Use below code instead.
@@ -110,15 +110,14 @@ If you want to use MobileNetV2, please upgrade your tensorflow version and you c
 Solution:
 
 1. For Google Colab and latest version of tensorflow, Use: `!pip install keras_applications` will install keras-applications >= 1.0.8 For tensorflow version >= 2.5.0
-2. use from `keras.applications.mobilenet_v2 import MobileNetV2`.
-
+2. Import:
+```python
+keras.applications.mobilenet_v2 import MobileNetV2`.
+```
 ### 4. eval_csv.py
 * Levenshtein distance problem
 
-Issue:
-```python
-In eval_csv.py line no 20, errors = Levenshtein.distance(a, b)
-```
+Issue: `In eval_csv.py line no 20, errors = Levenshtein.distance(a, b)`
 
 Solution: This worked for me:
 ```python
@@ -131,10 +130,7 @@ from training import SSIMLoss
 ```
 * levenshtein() problem
 
-Issue:
-```python
-TypeError: 'float' object is not subscriptable
-```
+Issue: `TypeError: 'float' object is not subscriptable`
 
 Solution: A float value is being passed to the levenshtein() function, which expects strings to compare character by character. This likely means that some values in gt (ground truth) or sr (super-resolved predictions) are not strings but floats, and the function tries to perform character-by-character comparisons on a float, which is not possible. After here and there you can convert a&b to str(a) & str(b). But you will find NaN which is one of possible prediction.
 ```python
