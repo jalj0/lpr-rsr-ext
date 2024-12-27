@@ -5,7 +5,8 @@ Original Paper: [Super-Resolution of License Plate Images Using
 1. Leveraged [Deformable Convolution](https://arxiv.org/pdf/1703.06211) layers to enhance the model’s performance.
 2. Formulated a new loss function based on the SSIM metric, termed as `Dissimilarity Loss`.
 ## Custom Dataset Fine-tune
-1. `dataset` folder structure:
+1. Environment setup: Find [conda_env.txt]() file
+2. `dataset` folder structure:
 
 ```bash
 ├── dataset
@@ -18,16 +19,19 @@ Original Paper: [Super-Resolution of License Plate Images Using
 │   │   ├── ...
 │   └── split.txt
 ```
-2. Make a text file 'split.txt' which will contain the path for HR and LR with type, all seperated by ';'.
+3. Make a text file 'split.txt' which will contain the path for HR and LR with type, all seperated by ';'.
 ```python
 dataset/HR/img891.jpg;dataset/LR/img891.jpg;training
 dataset/HR/img185.jpg;dataset/LR/img185.jpg;validation
 dataset/HR/img089.jpg;dataset/LR/img089.jpg;testing
+...
+...
+...
 ```
-3. Run the following code to fine-tune
+4. Run the following code to fine-tune
 ```python
 # Set mode to '1' to resume training & select your best pretrained model
-python training.py -t ./dataset/split.txt -s ./save -b 2 -m 1 --model /home1/jalaj_l/Proposed/save/bestpretrainedmodel.pt
+python training.py -t ./dataset/split.txt -s ./save -b 2 -m 1 --model /home1/jalaj_l/pro/save/bestpretrainedmodel.pt
 ```
 ## Training from Start
 1. Run the following code to start training from scratch
@@ -39,7 +43,7 @@ python training.py -t ./dataset/split.txt -s ./save -b 2 -m 0
 1. Run the following code for testing the performance of the model
 ```python
 # Remove mode argument for testing
-python testing.py -t ./dataset/split.txt -s ./save -b 2 --model /home1/jalaj_l/Proposed/save/bestpretrainedmodel.pt
+python testing.py -t ./dataset/split.txt -s ./save -b 2 --model /home1/jalaj_l/pro/save/bestpretrainedmodel.pt
 ```
 
 ## Known Issues and Solutions
@@ -117,9 +121,25 @@ Solution:
 1. For Google Colab and latest version of tensorflow, Use: `!pip install keras_applications` will install keras-applications >= 1.0.8 For tensorflow version >= 2.5.0
 2. Import:
 ```python
-keras.applications.mobilenet_v2 import MobileNetV2`.
+keras.applications.mobilenet_v2 import MobileNetV2
 ```
-### 4. eval_csv.py
+### 4. training.py
+* Import Issue
+
+Issue:
+Problem in lodading the json file. These are the pretrained OCR files used when loading the OCR model into our network.
+
+Solution:
+
+One of the following import might solve your problem.
+```python
+# make any one import
+from tensorflow.python.keras.models import model_from_json #or
+from tensorflow.keras.models import model_from_json #or
+from keras.models import model_from_json
+```
+The last one works fine for me.
+### 5. eval_csv.py
 * Levenshtein distance problem
 
 Issue: `In eval_csv.py line no 20, errors = Levenshtein.distance(a, b)`
